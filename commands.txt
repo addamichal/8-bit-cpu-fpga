@@ -1,0 +1,3 @@
+yosys -p "prep -top top; write_json diagram.json" top.v
+yosys -p "prep -top top -flatten; write_json diagram.json" top.v
+yosys -p "prep -top top; aigmap; write_json diagram.json" top.v
