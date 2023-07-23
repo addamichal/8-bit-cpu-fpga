@@ -10,6 +10,9 @@
 `include "alu.v"
 `include "control_logic.v"
 `include "instruction_counter.v"
+`include "register.v"
+`include "dmux.v"
+`include "dff.v"
 
 `default_nettype none
 

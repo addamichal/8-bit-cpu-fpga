@@ -5,8 +5,8 @@ module half_adder(
     output carry
 );
 
-assign sum = a ^ b; // bitwise xor
-assign carry = a & b; // bitwise adn
+assign sum = a ^ b;
+assign carry = a & b;
 
 endmodule
 
@@ -18,23 +18,25 @@ module full_adder(
     output carry_out
 );
 
-wire s_1;
-wire c_1;
-wire c_2;
+wire sum_1;
+wire carry_out_1;
+wire carry_out_2;
 
-half_adder half_adder1(.a(a),
+half_adder half_adder1(
+    .a(a),
     .b(b),
-    .sum(s_1),
-    .carry(c_1)
+    .sum(sum_1),
+    .carry(carry_out_1)
 );
 
-half_adder half_adder2(.a(carry_in),
-    .b(s_1),
+half_adder half_adder2(
+    .a(carry_in),
+    .b(sum_1),
     .sum(sum),
-    .carry(c_2)
+    .carry(carry_out_2)
 );
 
-assign carry_out = c_1 | c_2;
+assign carry_out = carry_out_1 | carry_out_2;
 
 endmodule
 

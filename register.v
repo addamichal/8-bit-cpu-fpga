@@ -1,7 +1,7 @@
 module register4(
     input [3:0] d,
     input clk,
-    input rstn,
+    input clr,
     input we,
     output [3:0] q);
 
@@ -14,28 +14,28 @@ module register4(
 
     dff dff0(
         .d(d[0]),
-        .rstn(rstn),
+        .rstn(~clr),
         .clk(and1),
         .q(q0)
     );
 
     dff dff1(
         .d(d[1]),
-        .rstn(rstn),
+        .rstn(~clr),
         .clk(and1),
         .q(q1)
     );
 
     dff dff2(
         .d(d[2]),
-        .rstn(rstn),
+        .rstn(~clr),
         .clk(and1),
         .q(q2)
     );
 
     dff dff3(
         .d(d[3]),
-        .rstn(rstn),
+        .rstn(~clr),
         .clk(and1),
         .q(q3)
     );
