@@ -34,6 +34,24 @@ end
 
 endmodule
 
+module out_register(
+	input [7:0] bus,
+	input clk,
+	input clr,
+	input oi,
+	output reg [7:0] out
+);
+
+always @(posedge clk or posedge clr) begin
+	if(clr) begin
+		out <= 0;
+	end else if(oi) begin
+		out <= bus;
+	end
+end
+
+endmodule
+
 module instruction_register(
 	input [7:0] bus,
 	input clk,

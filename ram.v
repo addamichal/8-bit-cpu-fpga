@@ -12,12 +12,7 @@ module ram(
 reg [7:0] ram [0:15];
 
 initial begin
-	ram[0] = 0;
-	ram[1] = 0;
-	ram[2] = 0;
-	ram[3] = 0;
-	ram[4] = 0;
-	ram[5] = 0;
+	$readmemb("bootloader.txt", ram);
 end
 
 always @(posedge clk or posedge clr) begin
@@ -39,3 +34,4 @@ end
 assign ram_value = ram[mar];
 
 endmodule
+
