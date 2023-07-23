@@ -89,3 +89,36 @@ module adder4(
     assign { sum_3, sum_2, sum_1, sum_0 } = sum;
 
 endmodule
+
+module adder8(
+    input [7:0] a,
+    input [7:0] b,
+    input carry_in,
+    output [7:0] sum,
+    output carry_out
+);
+
+    wire [3:0] sum_0;
+    wire [3:0] sum_1;
+
+    wire carry_out_0;
+
+    adder4 adder4_0(
+        .a(a[3:0]),
+        .b(b[3:0]),
+        .carry_in(carry_in),
+        .sum(sum_0),
+        .carry_out(carry_out_0)
+    );
+
+    adder4 adder4_1(
+        .a(a[7:4]),
+        .b(b[7:4]),
+        .carry_in(carry_out_0),
+        .sum(sum_1),
+        .carry_out(carry_out)
+    );
+
+    assign sum = { sum_1, sum_0 };
+
+endmodule
