@@ -1,5 +1,6 @@
 `include "clock_divider.v"
 `include "uart_send.v"
+`include "uart_receive.v"
 `include "seven_seg_ctrl.v"
 `include "seven_seg_hex.v"
 
@@ -22,42 +23,39 @@ assign { P1B10, P1B9, P1B8, P1B7, P1B4, P1B3, P1B2, P1B1 } = dip;
 
 wire rst = ~BTN_N;
 
-reg stopped = 0;
-reg done;
-reg busy;
+wire received;
+wire [7:0] receive_payload;
+reg [7:0] send_payload;
 
-reg [4:0] counter = 0;
-reg [1000: 0] start = "Hello World!";
-reg [7:0] payload;
-
-always @(posedge done or posedge rst) begin
-	if(rst) begin
-		counter = 0;
-		stopped <= 0;
-	end else if(counter == 4'd12) begin
-		stopped <= 1;
-	end else begin
-		counter <= counter + 1;
-		payload <= start[((11 - counter) + 1) * 8 : (11 - counter) * 8];
-	end
-end
+uart_receive uart_receive(
+	.clk(CLK),
+	.rst(rst),
+	.rx(RX),
+	.done(received),
+	.payload(receive_payload)
+);
 
 uart_send uart_send(
 	.clk(CLK),
 	.rst(rst),
-	.ready(~stopped),
+	.ready(received),
 	.tx(TX),
-	.payload(payload),
-	.busy(busy),
-	.done(done)
+	.payload(send_payload)
 );
+
+always @(posedge received) begin
+	send_payload <= receive_payload;
+end
+
+
+
 
 seven_seg_ctrl seven_segment_ctrl (
 	.CLK(CLK),
-	.din(counter),
+	.din(send_payload),
 	.dout(seven_segment)
 );
 
-assign LED1 = done;
+assign LED1 = RX;
 
 endmodule
