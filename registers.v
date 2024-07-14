@@ -3,16 +3,16 @@ module a_register(
 	input clk,
 	input clr,
 	input ai,
-	output reg [7:0] out
+	output [7:0] out
 );
 
-always @(posedge clk or posedge clr) begin
-	if(clr == 1'b1) begin
-		out <= 0;
-	end else if(ai == 1'b1) begin
-		out <= bus;
-	end
-end
+	register8 register8(
+		.d(bus),
+		.clk(clk),
+		.clr(clr),
+		.we(ai),
+		.q(out)
+	);
 
 endmodule
 
@@ -21,16 +21,16 @@ module b_register(
 	input clk,
 	input clr,
 	input bi,
-	output reg [7:0] out
+	output [7:0] out
 );
 
-always @(posedge clk or posedge clr) begin
-	if(clr == 1'b1) begin
-		out <= 0;
-	end else if(bi == 1'b1) begin
-		out <= bus;
-	end
-end
+	register8 register8(
+		.d(bus),
+		.clk(clk),
+		.clr(clr),
+		.we(bi),
+		.q(out)
+	);
 
 endmodule
 
@@ -39,16 +39,16 @@ module out_register(
 	input clk,
 	input clr,
 	input oi,
-	output reg [7:0] out
+	output [7:0] out
 );
 
-always @(posedge clk or posedge clr) begin
-	if(clr) begin
-		out <= 0;
-	end else if(oi) begin
-		out <= bus;
-	end
-end
+	register8 register8(
+		.d(bus),
+		.clk(clk),
+		.clr(clr),
+		.we(oi),
+		.q(out)
+	);
 
 endmodule
 
@@ -57,15 +57,33 @@ module instruction_register(
 	input clk,
 	input clr,
 	input ii,
-	output reg [7:0] out
+	output [7:0] out
 );
 
-always @(posedge clk or posedge clr) begin
-	if(clr) begin
-		out <= 0;
-	end else if(ii) begin
-		out <= bus;
-	end
-end
+	register8 register8(
+		.d(bus),
+		.clk(clk),
+		.clr(clr),
+		.we(ii),
+		.q(out)
+	);
+
+endmodule
+
+module mar_register(
+	input [3:0] bus,
+	input clk,
+	input clr,
+	input mi,
+	output [3:0] out
+);
+
+	register4 register4(
+		.d(bus),
+		.clk(clk),
+		.clr(clr),
+		.we(mi),
+		.q(out)
+	);
 
 endmodule

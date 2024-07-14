@@ -13,6 +13,7 @@
 `include "register.v"
 `include "dmux.v"
 `include "dff.v"
+`include "counter.v"
 
 `default_nettype none
 
@@ -54,8 +55,6 @@ wire hlt, mi, ri, ro, io, ii, ai, ao, eo, su, bi, oi, ce, co, j, fi;
 
 wire [7:0] out;
 wire [2:0] step;
-wire [3:0] instruction;
-wire [3:0] address;
 
 wire [3:0] pc;
 wire [7:0] a_reg;
@@ -76,13 +75,11 @@ assign bus =
 	ro ? out_ram :
 	io ? instr_reg[3:0] : 0;
 
-assign instruction = instr_reg[7:4];
-assign address = bus[3:0];
 assign out = out_reg;
 
 
 program_counter program_counter(
-	.bus(address),
+	.bus(bus[3:0]),
 	.clk(clk),
 	.clr(clr),
 	.ce(ce),
@@ -126,14 +123,20 @@ out_register out_register(
 	.out(out_reg)
 );
 
-ram ram(
-	.mar_bus(address),
-	.mi(mi),
+mar_register mar_register(
+	.bus(bus[3:0]),
 	.clk(clk),
 	.clr(clr),
-	.ram_bus(bus),
+	.mi(mi),
+	.out(mar)
+);
+
+ram ram(
+	.clk(clk),
+	.clr(clr),
+	.bus(bus),
 	.ri(ri),
-	.mar(mar),
+	.ram_address(mar),
 	.ram_value(out_ram)
 );
 
@@ -152,7 +155,7 @@ instruction_counter instruction_counter(
 );
 
 control_logic control_logic(
-	.instruction(instruction),
+	.instruction(instr_reg[7:4]),
 	.step(step),
 	.zf(zf),
 	.cf(cf),

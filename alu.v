@@ -6,8 +6,8 @@ module alu(
 	input su,
 	input fi,
 	output [7:0] out,
-	output reg cf,
-	output reg zf
+	output cf,
+	output zf
 );
 
 	wire [7:0] b_in;
@@ -44,14 +44,20 @@ module alu(
 
 	assign is_zero = nor1 & nor2 & nor3 & nor4;
 
-	always @(posedge clk or posedge clr) begin
-		if(clr == 1'b1) begin
-			cf <= 0;
-			zf <= 0;
-		end else if(fi == 1'b1) begin
-			cf <= is_carry;
-			zf <= is_zero;
-		end
-	end
+	register register_cf(
+		.d(is_carry),
+		.clk(clk),
+		.clr(clr),
+		.we(fi),
+		.q(cf)
+	);
+
+	register register_zf(
+		.d(is_zero),
+		.clk(clk),
+		.clr(clr),
+		.we(fi),
+		.q(zf)
+	);
 
 endmodule
