@@ -9,6 +9,7 @@ module program_counter(
 
 	wire [3:0] adder_out;
 	wire [3:0] dmux_out;
+	wire [3:0] result;
 
 	dmux4 dmux4(
 		.in1(adder_out),
@@ -22,14 +23,16 @@ module program_counter(
 		.clr(clr),
 		.clk(clk),
 		.we(1'd1),
-		.q(out)
+		.q(result)
 	);
 
 	adder4 adder4(
-		.a(out),
+		.a(result),
 		.b(4'd0),
 		.carry_in(ce),
 		.sum(adder_out)
 	);
+
+	assign out = result;
 
 endmodule
